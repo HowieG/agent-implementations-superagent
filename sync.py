@@ -11,16 +11,16 @@ llm = client.llm.create(request={
     "apiKey": os.environ["OPENAI_API_KEY"]
 })
 
-agent = client.agent.create(request={
-    "name": "Chat Assistant",
-    "description": "My first Assistant",
-    "type": "SUPERAGENT",
-    "avatar": "https://myavatar.com/homanp.png",
-    "isActive": True,
-    "initialMessage": "Hi there! How can I help you?",
-    "llmModel": "GPT_3_5_TURBO_16K_0613",
-    "prompt": "You are a helpful AI Assistant",
-})
+agent = client.agent.create(
+    name="Chat Assistant",
+    description="My first Assistant",
+    type="SUPERAGENT",
+    avatar="https=//myavatar.com/homanp.png",
+    is_active=True,
+    initial_message="Hi there! How can I help you?",
+    llm_model="GPT_3_5_TURBO_16K_0613",
+    prompt="You are a helpful AI Assistant",
+)
 
 client.agent.add_llm(agent_id=agent.data.id, llm_id=llm.data.id)
 
