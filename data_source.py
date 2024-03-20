@@ -1,5 +1,10 @@
 import os
+from dotenv import load_dotenv
 from superagent.client import Superagent
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 client = Superagent(
     token=os.environ["SUPERAGENT_API_KEY"],
@@ -24,12 +29,24 @@ agent = client.agent.create(
 
 client.agent.add_llm(agent_id=agent.data.id, llm_id=llm.data.id)
 
-response = client.agent.invoke(
+datasource = client.datasource.create(request={
+    "name": "Tesla Q3 2023",
+    "description": "Useful for answering questions about Teslas Q3 2023 earnings report",
+    "type": "PDF",
+    "url": "https://digitalassets.tesla.com/tesla-contents/image/upload/IR/TSLA-Q3-2023-Update-3.pdf"
+})
+
+# Connect the datasource the the Agent
+client.agent.add_datasource(
+    agent_id=agent.data.id,
+    datasource_id=datasource.data.id
+)
+
+prediction = client.agent.invoke(
     agent_id=agent.data.id,
     input="What was Tesla's revenue?",
     enable_streaming=False,
-    session_id="my_session_id",
-    llm_params={"temperature": 0.0, "max_tokens": 100}
+    session_id="my_session_id"
 )
 
-print(response.data.get("output"))
+print(prediction.data.get("output"))
