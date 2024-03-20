@@ -2,8 +2,8 @@ import os
 from superagent.client import Superagent
 
 client = Superagent(
-    token=os.environ["SUPERAGENT_API_KEY"],  # replace with your Superagent API
-    base_url="https://api.beta.superagent.sh"  # or your local environment
+    token=os.environ["SUPERAGENT_API_KEY"],
+    base_url="https://api.beta.superagent.sh"
 )
 
 llm = client.llm.create(request={
@@ -24,13 +24,12 @@ agent = client.agent.create(
 
 client.agent.add_llm(agent_id=agent.data.id, llm_id=llm.data.id)
 
-prediction = client.agent.invoke(
+response = client.agent.invoke(
     agent_id=agent.data.id,
-    input="Hi there!",
+    input="What was Tesla's revenue?",
     enable_streaming=False,
-    session_id="my_session"  # Best practice is to create a unique session per user
+    session_id="my_session_id",
+    llm_params={"temperature": 0.0, "max_tokens": 100}
 )
 
-print(prediction.data.get("output"))
-
-# Hello there, how can I help you?
+print(response.data.get("output"))
